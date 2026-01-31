@@ -1,0 +1,245 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's public profile information.",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "photoURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the user's profile picture."
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the user profile was created."
+        },
+        "interests": {
+            "type": "array",
+            "description": "A list of user interests for personalized recommendations.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "surveyCompleted": {
+            "type": "boolean",
+            "description": "Whether the user has completed the initial survey."
+        },
+        "purchaseHistory": {
+            "type": "array",
+            "description": "A list of product IDs the user has purchased.",
+            "items": {
+                "type": "string"
+            }
+        }
+      },
+      "required": ["displayName", "email", "createdAt", "surveyCompleted"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "Represents a newsletter subscription.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The subscriber's name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The subscriber's email address."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the subscription."
+        }
+      },
+      "required": ["name", "email", "createdAt"]
+    },
+    "Review": {
+      "title": "Product Review",
+      "description": "Represents a user's review of a product.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who wrote the review."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The display name of the user."
+        },
+        "avatarUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the user's profile picture."
+        },
+        "rating": {
+          "type": "number",
+          "description": "The star rating given by the user (1-5)."
+        },
+        "comment": {
+          "type": "string",
+          "description": "The text content of the review."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the review."
+        }
+      },
+      "required": ["userId", "displayName", "rating", "comment", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Represents a customer's order containing purchased items and total amount.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who placed the order."
+        },
+        "userDisplayName": {
+          "type": "string",
+          "description": "The display name of the user who placed the order."
+        },
+        "userEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "The email of the user who placed the order."
+        },
+        "userUpiId": {
+          "type": "string",
+          "description": "The UPI ID used for the payment, if available."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of when the order was placed."
+        },
+        "items": {
+          "type": "array",
+          "description": "A list of items included in the order.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "name": { "type": "string" },
+              "price": { "type": "number" },
+              "category": { "type": "string" }
+            },
+            "required": ["id", "name", "price"]
+          }
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "The total amount of the order."
+        }
+      },
+      "required": ["userId", "userDisplayName", "userEmail", "createdAt", "items", "totalAmount"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "Represents feedback submitted by a user.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The user's name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "feedback": {
+          "type": "string",
+          "description": "The feedback content."
+        },
+        "suggestion": {
+          "type": "string",
+          "description": "Suggestion for what can be added."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the feedback."
+        }
+      },
+      "required": ["name", "email", "createdAt"]
+    },
+    "GeneratedContent": {
+      "title": "Generated Product Content",
+      "description": "Stores AI-generated Markdown content for products.",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title of the document."
+        },
+        "content": {
+          "type": "string",
+          "description": "The full Markdown content of the document."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the content was generated."
+        }
+      },
+      "required": ["title", "content", "createdAt"]
+    }
+  },
+  "auth": {
+    "providers": ["google.com", "password"]
+  },
+  "firestore": {
+    "/generated_content/{productId}": {
+      "schema": {
+        "$ref": "#/entities/GeneratedContent"
+      },
+      "description": "Stores cached AI-generated content for products, where the document ID is the product ID."
+    },
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores public information for each user."
+    },
+    "/users/{userId}/orders/{orderId}": {
+      "schema": {
+        "$ref": "#/entities/Order"
+      },
+      "description": "Stores order history for each user."
+    },
+    "/subscriptions/{subscriptionId}": {
+      "schema": {
+        "$ref": "#/entities/Subscription"
+      },
+      "description": "Stores newsletter subscribers."
+    },
+    "/products/{productId}/reviews/{reviewId}": {
+      "schema": {
+        "$ref": "#/entities/Review"
+      },
+      "description": "Stores reviews for each product."
+    },
+    "/feedbacks/{feedbackId}": {
+      "schema": {
+        "$ref": "#/entities/Feedback"
+      },
+      "description": "Stores user feedback."
+    }
+  }
+}

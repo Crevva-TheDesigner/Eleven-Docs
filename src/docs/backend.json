@@ -1,0 +1,164 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Represents a user's public profile information.",
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The user's email address."
+        },
+        "photoURL": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the user's profile picture."
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the user profile was created."
+        },
+        "interests": {
+            "type": "array",
+            "description": "A list of user interests for personalized recommendations.",
+            "items": {
+                "type": "string"
+            }
+        },
+        "surveyCompleted": {
+            "type": "boolean",
+            "description": "Whether the user has completed the initial survey."
+        },
+        "purchaseHistory": {
+            "type": "array",
+            "description": "A list of product IDs the user has purchased.",
+            "items": {
+                "type": "string"
+            }
+        }
+      },
+      "required": ["displayName", "email", "createdAt", "surveyCompleted"]
+    },
+    "Subscription": {
+      "title": "Subscription",
+      "description": "Represents a newsletter subscription.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The subscriber's name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The subscriber's email address."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the subscription."
+        }
+      },
+      "required": ["name", "email", "createdAt"]
+    },
+    "ContactMessage": {
+      "title": "Contact Message",
+      "description": "Represents a message submitted through the contact form.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The sender's name."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The sender's email address."
+        },
+        "subject": {
+          "type": "string",
+          "description": "The message subject."
+        },
+        "message": {
+          "type": "string",
+          "description": "The message content."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the message."
+        }
+      },
+      "required": ["name", "email", "message", "createdAt"]
+    },
+    "Review": {
+      "title": "Product Review",
+      "description": "Represents a user's review of a product.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who wrote the review."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The display name of the user."
+        },
+        "avatarUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of the user's profile picture."
+        },
+        "rating": {
+          "type": "number",
+          "description": "The star rating given by the user (1-5)."
+        },
+        "comment": {
+          "type": "string",
+          "description": "The text content of the review."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the review."
+        }
+      },
+      "required": ["userId", "displayName", "rating", "comment", "createdAt"]
+    }
+  },
+  "auth": {
+    "providers": ["google.com", "password"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Stores public information for each user."
+    },
+    "/subscriptions/{subscriptionId}": {
+      "schema": {
+        "$ref": "#/entities/Subscription"
+      },
+      "description": "Stores newsletter subscribers."
+    },
+    "/contact-messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/ContactMessage"
+      },
+      "description": "Stores messages from the contact form."
+    },
+    "/products/{productId}/reviews/{reviewId}": {
+      "schema": {
+        "$ref": "#/entities/Review"
+      },
+      "description": "Stores reviews for each product."
+    }
+  }
+}
