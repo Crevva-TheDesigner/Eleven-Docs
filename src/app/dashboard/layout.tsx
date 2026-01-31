@@ -1,6 +1,7 @@
 'use client';
 
 import { useUser } from '@/firebase/auth/use-user';
+import { useUserProfile } from '@/firebase/firestore/use-user-profile';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
@@ -10,14 +11,25 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, loading } = useUser();
+  const { user, loading: authLoading } = useUser();
+  const { userProfile, loading: profileLoading } = useUserProfile(user);
   const router = useRouter();
 
   useEffect(() => {
+    const loading = authLoading || (user && profileLoading);
+
     if (!loading && !user) {
       router.push('/login?redirect=/dashboard');
+      return;
     }
-  }, [user, loading, router]);
+
+    if (!loading && user && userProfile && !userProfile.surveyCompleted) {
+      router.push('/survey');
+      return;
+    }
+  }, [user, userProfile, authLoading, profileLoading, router]);
+
+  const loading = authLoading || (user && profileLoading);
 
   if (loading) {
     return (

@@ -11,7 +11,6 @@ import { useUser } from '@/firebase/auth/use-user';
 import { auth, firestore } from '@/firebase/client';
 import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { useUserProfile } from '@/firebase/firestore/use-user-profile';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Loader2, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
@@ -23,7 +22,6 @@ export default function LoginClient() {
 
   const { toast } = useToast();
   const { user, loading: authLoading } = useUser();
-  const { userProfile, loading: profileLoading } = useUserProfile(user);
   
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -36,16 +34,16 @@ export default function LoginClient() {
 
 
   useEffect(() => {
-    if (!authLoading && !profileLoading && user && userProfile) {
-        if (!userProfile.surveyCompleted) {
-            router.push('/survey');
-        } else if (redirect) {
+    // If the user is logged in (and auth is not loading), redirect them away from the login page.
+    // The dashboard layout will handle the check for survey completion.
+    if (!authLoading && user) {
+        if (redirect) {
             router.push(redirect);
         } else {
             router.push('/dashboard');
         }
     }
-  }, [user, userProfile, authLoading, profileLoading, router, redirect]);
+  }, [user, authLoading, router, redirect]);
 
   const handleGoogleLogin = async () => {
     try {
@@ -76,19 +74,11 @@ export default function LoginClient() {
     }
   };
   
-  if (authLoading || (user && profileLoading)) {
+  // Show a loader while auth state is loading or if a logged-in user is being redirected.
+  if (authLoading || user) {
     return (
         <div className="flex items-center justify-center min-h-[calc(100vh-14rem)]">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        </div>
-    )
-  }
-  
-  if (user && userProfile) {
-    // This will be handled by the useEffect, but as a fallback:
-    return (
-        <div className="flex items-center justify-center min-h-[calc(100vh-14rem)]">
-             <Loader2 className="h-12 w-12 animate-spin text-primary" />
         </div>
     )
   }
