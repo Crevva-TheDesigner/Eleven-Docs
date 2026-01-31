@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useUserProfile } from '@/firebase/firestore/use-user-profile';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 
 export default function LoginClient() {
@@ -27,9 +27,13 @@ export default function LoginClient() {
   
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+
   const [registerName, setRegisterName] = useState('');
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+
 
   useEffect(() => {
     if (!authLoading && !profileLoading && user && userProfile) {
@@ -136,7 +140,26 @@ export default function LoginClient() {
                             Forgot Password?
                         </Link>
                     </div>
-                    <Input id="login-password" type="password" required value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} className="rounded-full" />
+                    <div className="relative">
+                        <Input 
+                            id="login-password" 
+                            type={showLoginPassword ? "text" : "password"} 
+                            required 
+                            value={loginPassword} 
+                            onChange={(e) => setLoginPassword(e.target.value)} 
+                            className="rounded-full pr-10" 
+                        />
+                        <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="icon" 
+                            className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-muted-foreground"
+                            onClick={() => setShowLoginPassword(prev => !prev)}
+                        >
+                            {showLoginPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            <span className="sr-only">{showLoginPassword ? 'Hide password' : 'Show password'}</span>
+                        </Button>
+                    </div>
                 </div>
                 <Button type="submit" className="w-full">Sign In</Button>
               </form>
@@ -166,7 +189,26 @@ export default function LoginClient() {
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="register-password">Password</Label>
-                    <Input id="register-password" type="password" required minLength={6} value={registerPassword} onChange={(e) => setRegisterPassword(e.target.value)} className="rounded-full"/>
+                    <div className="relative">
+                        <Input 
+                            id="register-password" 
+                            type={showRegisterPassword ? "text" : "password"} 
+                            required minLength={6} 
+                            value={registerPassword} 
+                            onChange={(e) => setRegisterPassword(e.target.value)} 
+                            className="rounded-full pr-10"
+                        />
+                         <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="icon" 
+                            className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-muted-foreground"
+                            onClick={() => setShowRegisterPassword(prev => !prev)}
+                        >
+                            {showRegisterPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                            <span className="sr-only">{showRegisterPassword ? 'Hide password' : 'Show password'}</span>
+                        </Button>
+                    </div>
                 </div>
                 <Button type="submit" className="w-full">Create Account</Button>
               </form>
