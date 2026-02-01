@@ -40,7 +40,7 @@ export function Header() {
   const navLinks = [
     ...(isClient && user ? [{ href: '/dashboard', label: 'Dashboard' }] : []),
     { href: '/#home', label: 'Home' },
-    { href: '/#about-crevva', label: 'About' },
+    { href: '/#about', label: 'About' },
     { href: '/products', label: 'Library' },
     ...(isClient && user ? [{ href: '/#for-you', label: 'For You' }] : []),
     { href: '/ai-pdf-generator', label: 'AI PDF Creator', icon: Sparkles },

@@ -41,7 +41,7 @@ export default function Home() {
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
 
   useEffect(() => {
-    const sections = ['home', 'about-crevva', 'featured-products', 'contact'];
+    const sections = ['home', 'about', 'featured-products', 'contact'];
     if (user) {
       sections.push('for-you');
     }
@@ -215,7 +215,7 @@ export default function Home() {
         </div>
       </header>
 
-      <section id="about-crevva" className="my-16 sm:my-24 scroll-mt-20">
+      <section id="about" className="my-16 sm:my-24 scroll-mt-20">
         <div className="text-center max-w-5xl mx-auto">
             <h2 className="text-4xl font-extrabold tracking-tighter mb-6">What is Eleven Docs?</h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
