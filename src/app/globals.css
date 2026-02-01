@@ -237,3 +237,10 @@
     cursor: auto !important;
   }
 }
+
+@keyframes fill-progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+.progress-bar

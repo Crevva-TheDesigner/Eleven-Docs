@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { allProducts } from '@/lib/data';
 import { ProductCard } from '@/components/ProductCard';
 import { PersonalizedRecommendations } from '@/components/PersonalizedRecommendations';
-import { ArrowDown, Mail, Phone, Sparkles } from 'lucide-react';
+import { ArrowDown, Mail, Sparkles, GraduationCap, Code, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useUser } from '@/firebase/auth/use-user';
@@ -26,6 +26,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { submitFeedback } from '@/firebase/firestore/feedbacks';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+const AUTOPLAY_INTERVAL = 20000; // 20 seconds
 
 export default function Home() {
   const { user } = useUser();
@@ -39,6 +42,21 @@ export default function Home() {
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const [suggestionMessage, setSuggestionMessage] = useState('');
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+
+  const tabValues = ['students', 'developers', 'creatives', 'ai'];
+  const [activeTab, setActiveTab] = useState(tabValues[0]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+        setActiveTab(prevTab => {
+            const currentIndex = tabValues.indexOf(prevTab);
+            const nextIndex = (currentIndex + 1) % tabValues.length;
+            return tabValues[nextIndex];
+        });
+    }, AUTOPLAY_INTERVAL);
+
+    return () => clearInterval(timer);
+  }, [activeTab]);
 
   useEffect(() => {
     const sections = ['home', 'about', 'featured-products', 'contact'];
@@ -222,32 +240,63 @@ export default function Home() {
                 Eleven Docs is a curated digital marketplace designed for the modern student, developer, and creative professional. Our mission is to provide high-quality, meticulously crafted digital assets that fuel your productivity, accelerate your learning, and inspire your next big project.
             </p>
             <AboutStats />
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                <div className="bg-card p-6 rounded-xl border">
-                    <h3 className="font-bold text-xl mb-2">For Students</h3>
-                    <p className="text-muted-foreground">
-                        Unlock your academic potential with our extensive library of resources for students from <strong>Class 8 onwards</strong>. Our materials, tailored for <strong>CBSE and ICSE boards</strong>, include comprehensive, chapter-wise notes for subjects like Physics, Chemistry, and Biology, along with exam-specific preparation kits like sample papers, formula sheets, and revision guides. We cover everything from school curriculum to competitive exams and beyond, with study aids designed to help you understand concepts deeply, not just memorize them.
-                    </p>
+
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-16 text-left">
+                <TabsList className="flex flex-wrap h-auto justify-center gap-2 p-2 bg-muted/50 rounded-full">
+                    <TabsTrigger value="students" className="flex items-center justify-center h-auto gap-2 p-4 text-center whitespace-normal data-[state=active]:bg-card data-[state=active]:shadow-md rounded-full">
+                        <GraduationCap className="h-6 w-6" />
+                        <span className="font-semibold">For Students</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="developers" className="flex items-center justify-center h-auto gap-2 p-4 text-center whitespace-normal data-[state=active]:bg-card data-[state=active]:shadow-md rounded-full">
+                        <Code className="h-6 w-6" />
+                        <span className="font-semibold">For Developers</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="creatives" className="flex items-center justify-center h-auto gap-2 p-4 text-center whitespace-normal data-[state=active]:bg-card data-[state=active]:shadow-md rounded-full">
+                        <Lightbulb className="h-6 w-6" />
+                        <span className="font-semibold">For Creatives</span>
+                    </TabsTrigger>
+                    <TabsTrigger value="ai" className="flex items-center justify-center h-auto gap-2 p-4 text-center whitespace-normal data-[state=active]:bg-card data-[state=active]:shadow-md rounded-full">
+                        <Sparkles className="h-6 w-6" />
+                        <span className="font-semibold">AI-Powered</span>
+                    </TabsTrigger>
+                </TabsList>
+                
+                <div className="w-full bg-muted/50 rounded-full h-1 mt-4 overflow-hidden">
+                    <div key={activeTab} className="bg-primary h-1 rounded-full progress-bar-animation" style={{ animationDuration: `${AUTOPLAY_INTERVAL}ms` }}></div>
                 </div>
-                <div className="bg-card p-6 rounded-xl border">
-                    <h3 className="font-bold text-xl mb-2">For Developers & Tech Enthusiasts</h3>
-                    <p className="text-muted-foreground">
-                        Accelerate your development workflow with our collection of code libraries, UI kits for frameworks like React and Vue, and ready-to-use Python automation scripts. Dive into complex topics like Data Structures, Algorithms, AI & Machine Learning, and Cyber Security with our beginner-friendly notes and concept guides, designed to make learning practical and accessible.
-                    </p>
+
+                <div className="mt-6 p-8 border rounded-xl bg-card relative overflow-hidden">
+                  <TabsContent value="students" className="relative z-10 data-[state=active]:animate-in data-[state=active]:fade-in-50 data-[state=active]:duration-700">
+                      <GraduationCap className="absolute -top-4 -right-4 h-32 w-32 text-foreground/5" />
+                      <h3 className="font-bold text-2xl mb-4 text-card-foreground">For Students</h3>
+                      <p className="text-muted-foreground text-base leading-relaxed">
+                          Unlock your academic potential with our extensive library of resources for students from <strong>Class 8 onwards</strong>. Our materials, tailored for <strong>CBSE and ICSE boards</strong>, include comprehensive, chapter-wise notes for subjects like Physics, Chemistry, and Biology, along with exam-specific preparation kits like sample papers, formula sheets, and revision guides. We cover everything from school curriculum to competitive exams and beyond, with study aids designed to help you understand concepts deeply, not just memorize them.
+                      </p>
+                  </TabsContent>
+                  <TabsContent value="developers" className="relative z-10 data-[state=active]:animate-in data-[state=active]:fade-in-50 data-[state=active]:duration-700">
+                      <Code className="absolute -top-4 -right-4 h-32 w-32 text-foreground/5" />
+                      <h3 className="font-bold text-2xl mb-4 text-card-foreground">For Developers & Tech Enthusiasts</h3>
+                      <p className="text-muted-foreground text-base leading-relaxed">
+                          Accelerate your development workflow with our collection of code libraries, UI kits for frameworks like React and Vue, and ready-to-use Python automation scripts. Dive into complex topics like Data Structures, Algorithms, AI & Machine Learning, and Cyber Security with our beginner-friendly notes and concept guides, designed to make learning practical and accessible.
+                      </p>
+                  </TabsContent>
+                  <TabsContent value="creatives" className="relative z-10 data-[state=active]:animate-in data-[state=active]:fade-in-50 data-[state=active]:duration-700">
+                      <Lightbulb className="absolute -top-4 -right-4 h-32 w-32 text-foreground/5" />
+                      <h3 className="font-bold text-2xl mb-4 text-card-foreground">For Creatives & Self-Improvers</h3>
+                      <p className="text-muted-foreground text-base leading-relaxed">
+                          Fuel your personal growth and creativity. Find beautifully designed planners, digital journals, and goal-setting workbooks to organize your life. Develop new skills with our guides on public speaking, guitar, creative writing, and more. Our resources are crafted to help you build better habits, manage your time, and unlock your creative potential.
+                      </p>
+                  </TabsContent>
+                  <TabsContent value="ai" className="relative z-10 data-[state=active]:animate-in data-[state=active]:fade-in-50 data-[state=active]:duration-700">
+                      <Sparkles className="absolute -top-4 -right-4 h-32 w-32 text-foreground/5" />
+                      <h3 className="font-bold text-2xl mb-4 text-card-foreground">AI-Powered Tools</h3>
+                      <p className="text-muted-foreground text-base leading-relaxed">
+                          Experience the future of content creation with our unique AI PDF Generator. Simply describe the document you need – whether it's a study guide, a business report, or a meal planner – and our AI will craft a professional-quality PDF for you in seconds. It's your personal content creation assistant, available 24/7.
+                      </p>
+                  </TabsContent>
                 </div>
-                <div className="bg-card p-6 rounded-xl border">
-                    <h3 className="font-bold text-xl mb-2">For Creatives & Self-Improvers</h3>
-                    <p className="text-muted-foreground">
-                        Fuel your personal growth and creativity. Find beautifully designed planners, digital journals, and goal-setting workbooks to organize your life. Develop new skills with our guides on public speaking, guitar, creative writing, and more. Our resources are crafted to help you build better habits, manage your time, and unlock your creative potential.
-                    </p>
-                </div>
-                <div className="bg-card p-6 rounded-xl border">
-                    <h3 className="font-bold text-xl mb-2">AI-Powered Tools</h3>
-                    <p className="text-muted-foreground">
-                        Experience the future of content creation with our unique AI PDF Generator. Simply describe the document you need – whether it's a study guide, a business report, or a meal planner – and our AI will craft a professional-quality PDF for you in seconds. It's your personal content creation assistant, available 24/7.
-                    </p>
-                </div>
-            </div>
+            </Tabs>
+
             <p className="mt-12 text-lg text-muted-foreground leading-relaxed">
                 At Eleven Docs, every product is either carefully created by experts or generated by cutting-edge AI to meet our high standards of quality and utility. We believe in secure, seamless transactions, which is why we've integrated Razorpay for payments. Your dashboard keeps all your purchases organized and accessible anytime.
             </p>
