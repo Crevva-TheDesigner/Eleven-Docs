@@ -9,6 +9,22 @@ export default {
   ],
   theme: {
     extend: {
+      typography: ({ theme }) => ({
+        DEFAULT: {
+          css: {
+            pre: {
+              borderRadius: theme('borderRadius.xl'),
+            },
+          },
+        },
+        invert: {
+           css: {
+            pre: {
+              borderRadius: theme('borderRadius.xl'),
+            },
+          },
+        }
+      }),
       fontFamily: {
         body: ['var(--font-body)'],
         headline: ['var(--font-body)'],

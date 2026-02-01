@@ -36,7 +36,7 @@ export default function AiPdfGeneratorPage() {
   const [pageState, setPageState] = useState<PageState>('idle');
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [generatedProduct, setGeneratedProduct] = useState<Product | null>(null);
-  const pdfCost = 49;
+  const pdfCost = 29;
 
   const handleGenerate = async () => {
     if (!prompt.trim()) {

@@ -54,7 +54,7 @@ export default function CheckoutPage() {
                         id: productId,
                         name: pdfData.title || `AI Document #${productId}`,
                         description: 'An AI-generated document.',
-                        price: 49,
+                        price: 29,
                         category: 'AI Services',
                         rating: 0,
                         reviewCount: 0,

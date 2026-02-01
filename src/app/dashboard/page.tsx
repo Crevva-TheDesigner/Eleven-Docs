@@ -13,7 +13,7 @@ import {
     ShoppingBag,
     MessageSquarePlus,
     Users,
-    Mail,
+    Mail,a
     MessageCircle,
     FileCheck,
     Eye,
@@ -193,7 +193,7 @@ function DashboardView() {
                         name: title,
                         description: `Generated on ${new Date(parseInt(id.split('-')[2])).toLocaleDateString()}`,
                         category: 'AI Services' as const,
-                        price: 49,
+                        price: 29,
                         rating: 5,
                         reviewCount: 0,
                         imageUrl: 'https://images.unsplash.com/photo-1677756119517-756a188d2d94?q=80&w=80&h=80&auto=format&fit=crop',

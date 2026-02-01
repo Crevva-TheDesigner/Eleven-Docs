@@ -34,19 +34,22 @@ export async function generatePdfContent(input: GeneratePdfContentInput): Promis
       name: 'generatePdfContentPrompt',
       input: { schema: GeneratePdfContentInputSchema },
       output: { schema: AIContentSchema },
-      prompt: `You are an expert content creator. Your task is to generate the content for a document in Markdown format based on a user's prompt.
+      prompt: `You are an expert content creator. Your task is to generate content for a document in Markdown format based on a user's prompt. The goal is to provide a high-quality, useful document that is clear and well-structured.
 
-**Crucial Instruction:** Your output must BE the document, not a description of it. Do not write meta-commentary about the document, such as 'In this PDF you will find...' or 'Why choose this guide?'. Your response should contain only the raw Markdown content for the document itself. For example, if the prompt is for 'A Guide to Success', you will write the actual guide, starting with its title and content, not an introduction about the guide.
+**Content Depth and Quality:**
+- The content should be **well-detailed and clear**, providing substantial value.
+- Aim for a word count around **1500-2000 words**. The goal is a solid, valuable document, not an exhaustive encyclopedia.
+- Structure the document professionally using Markdown elements like headings (#, ##, ###), lists (* or -), bold (**text**), and tables where appropriate.
+
+**Crucial Instruction:** Your output must BE the document, not a description of it. Do not write meta-commentary about the document, such as 'In this PDF you will find...' or 'Why choose this guide?'. Your response should contain only the raw Markdown content for the document itself.
 
 First, create a short, descriptive title for the document based on the user's prompt.
 Then, generate the main body of the content.
 
-The content should be professionally structured using Markdown elements like headings (#, ##, ###), lists (* or -), bold (**text**), and tables.
-
-**Content Depth and Length:**
-- For academic or educational topics like 'chapter-wise notes', 'study guides', or 'exam preparation', the content must be very thorough and detailed. Aim for a substantial length, equivalent to **10-14 pages** in a standard document.
-- Break down complex topics into smaller, digestible sections with clear headings. Use lists, tables, code blocks (for technical topics), and examples to enhance understanding.
-- For other topics like planners or simple guides, the length should be appropriate to the subject matter but still comprehensive.
+**Completeness Instruction:**
+- To signify that you have finished the entire document and not been cut off, you **MUST** end your response with the following exact text on a new line:
+\`<!-- DOCUMENT_COMPLETE -->\`
+- There should be no text after this marker.
 
 Ensure the content is coherent and directly addresses the user's request. Pay close attention to any specific instructions in the user prompt regarding structure, such as the inclusion or exclusion of a conclusion.
 
@@ -63,8 +66,15 @@ User Prompt: {{{prompt}}}
       return { error: 'The AI model did not return any content. Please try again with a different prompt.', title: '', content: '' };
     }
 
-    // Clean the content to remove potential markdown code blocks surrounding the actual content
-    let processedContent = output.content;
+    // Check for completeness marker
+    if (!output.content.includes('<!-- DOCUMENT_COMPLETE -->')) {
+      // This indicates the model's output was truncated before it could finish.
+      console.error("Generated content was truncated by the model. The 'DOCUMENT_COMPLETE' marker was not found.");
+      return { error: 'The AI model was unable to generate the full document because the content was cut short. This can happen with very long or complex requests. Please try again with a more specific prompt.', title: '', content: '' };
+    }
+
+    // Clean the content to remove the marker and potential markdown code blocks
+    let processedContent = output.content.replace('<!-- DOCUMENT_COMPLETE -->', '').trim();
     const markdownBlockRegex = /```(?:markdown|md)?\s*([\s\S]*?)\s*```/;
     const match = processedContent.match(markdownBlockRegex);
 

@@ -39,14 +39,11 @@ export async function generateAndCacheProductContent(product: Product): Promise<
 
     // 3. If not in Firestore, generate new content via AI.
     
-    // Determine content length based on price
-    let desiredLength = "2-3 pages";
-    if (product.price >= 1000) {
-      desiredLength = "10-14 pages";
-    } else if (product.price >= 600) {
-      desiredLength = "6-9 pages";
-    } else if (product.price >= 300) {
-      desiredLength = "3-5 pages";
+    let lengthInstruction: string;
+    if (product.price > 69) {
+        lengthInstruction = `The content must be **exceptionally long, very detailed, and comprehensive**, suitable for a premium digital product. Your main goal is to create a long, definitive guide. The length should be substantial, aiming for a minimum of 4000 words. Do not summarize; expand on every possible sub-topic related to the product description with detailed explanations, examples, and sub-sections.`;
+    } else {
+        lengthInstruction = `The content should be **medium-length, clear, and concise**, providing solid value for its price. It should cover the main points of the topic well, but doesn't need to be an exhaustive deep-dive. Aim for around 1500-2000 words.`;
     }
 
     let specificFormattingInstructions = "Break down complex topics into smaller, digestible sections with clear headings. Use lists, tables, code blocks (for technical topics), and examples to enhance understanding.";
@@ -58,14 +55,14 @@ export async function generateAndCacheProductContent(product: Product): Promise<
 
 
     const prompt = `
-      Generate detailed, comprehensive content for a digital product with the following details:
+      Generate content for a digital product with the following details:
       - Name: "${product.name}"
       - Description: "${product.description}"
       - Category: "${product.category}"
       - Keywords: "${product.tags.join(', ')}"
 
-      **Content Depth and Length:**
-      - The desired length for this document is **${desiredLength}** in a standard document. Please adhere to this length.
+      **Content Depth & Length:**
+      - ${lengthInstruction}
       - ${specificFormattingInstructions}
 
       **Crucial Instructions:**
@@ -74,6 +71,12 @@ export async function generateAndCacheProductContent(product: Product): Promise<
     `;
 
     const result = await generatePdfContent({ prompt });
+
+    if (result.error) {
+      // This is the important change. Log the specific error from the AI flow.
+      console.error(`AI Generation Error for product ${product.id}: ${result.error}`);
+      return false;
+    }
 
     if (result.content && result.title) {
       const pdfData = {
@@ -100,11 +103,12 @@ export async function generateAndCacheProductContent(product: Product): Promise<
       }
 
     } else {
-        console.error(`AI Generation Error: AI model did not return content for ${product.id}`);
+        // This is now a fallback for an unexpected success case where content is missing.
+        console.error(`AI Generation Error: AI model returned an empty but successful response for ${product.id}`);
         return false;
     }
   } catch (error) {
-    // This catches errors from getDoc or generatePdfContent
+    // This catches errors from getDoc or other issues *before* generatePdfContent is called.
     console.error(`Failed to generate/cache content for ${product.id}`, error);
     return false;
   }
