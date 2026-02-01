@@ -89,20 +89,27 @@ export default {
           },
         },
         'icon-float': {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-20px)' },
+          '0%, 100%': { 
+            transform: 'translateY(0px)',
+            filter: 'drop-shadow(0 0 4px hsl(var(--primary) / 0.4))' 
+          },
+          '50%': { 
+            transform: 'translateY(-20px)',
+            filter: 'drop-shadow(0 0 12px hsl(var(--primary) / 0.6))'
+          },
         },
         'hurray-bounce-in': {
-          '0%': { transform: 'scale(0.3)', opacity: '0' },
-          '50%': { transform: 'scale(1.1)' },
-          '70%': { transform: 'scale(0.9)' },
+          '0%': { transform: 'scale(0.1)', opacity: '0' },
+          '40%': { transform: 'scale(1.2)', opacity: '1' },
+          '60%': { transform: 'scale(0.9)' },
+          '80%': { transform: 'scale(1.05)' },
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
         'hurray-float-rl': {
-          '0%': { transform: 'translateX(0px)' },
-          '25%': { transform: 'translateX(-15px) rotate(-2deg)' },
-          '75%': { transform: 'translateX(15px) rotate(2deg)' },
-          '100%': { transform: 'translateX(0px)' },
+            '0%': { transform: 'translateX(0px) rotate(0deg)' },
+            '25%': { transform: 'translateX(-20px) rotate(-3deg)' },
+            '75%': { transform: 'translateX(20px) rotate(3deg)' },
+            '100%': { transform: 'translateX(0px) rotate(0deg)' },
         },
         'confetti-pop': {
           '0%': {
@@ -119,8 +126,8 @@ export default {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'icon-float': 'icon-float 6s ease-in-out infinite',
-        'hurray': 'hurray-bounce-in 0.8s ease-out forwards, hurray-float-rl 3.2s ease-in-out infinite 0.8s',
-        'confetti-pop': 'confetti-pop 2s cubic-bezier(0.25, 1, 0.5, 1) forwards',
+        'hurray': 'hurray-bounce-in 1s cubic-bezier(0.21, 1.1, 0.7, 1) forwards, hurray-float-rl 4s ease-in-out infinite 1s',
+        'confetti-pop': 'confetti-pop 2.5s cubic-bezier(0.1, 1, 0.7, 1) forwards',
       },
     },
   },

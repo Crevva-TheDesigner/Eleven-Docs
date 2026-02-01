@@ -243,4 +243,6 @@
   to { width: 100%; }
 }
 
-.progress-bar
+.progress-bar-animation {
+  animation: fill-progress 20s linear;
+}
