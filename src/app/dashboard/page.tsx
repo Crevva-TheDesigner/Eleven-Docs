@@ -13,7 +13,7 @@ import {
     ShoppingBag,
     MessageSquarePlus,
     Users,
-    Mail,a
+    Mail,
     MessageCircle,
     FileCheck,
     Eye,
