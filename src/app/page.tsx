@@ -223,25 +223,25 @@ export default function Home() {
             </p>
             <AboutStats />
             <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                <div className="bg-card p-6 rounded-3xl border">
+                <div className="bg-card p-6 rounded-xl border">
                     <h3 className="font-bold text-xl mb-2">For Students</h3>
                     <p className="text-muted-foreground">
                         Unlock your academic potential with our extensive library of resources for students from <strong>Class 8 onwards</strong>. Our materials, tailored for <strong>CBSE and ICSE boards</strong>, include comprehensive, chapter-wise notes for subjects like Physics, Chemistry, and Biology, along with exam-specific preparation kits like sample papers, formula sheets, and revision guides. We cover everything from school curriculum to competitive exams and beyond, with study aids designed to help you understand concepts deeply, not just memorize them.
                     </p>
                 </div>
-                <div className="bg-card p-6 rounded-3xl border">
+                <div className="bg-card p-6 rounded-xl border">
                     <h3 className="font-bold text-xl mb-2">For Developers & Tech Enthusiasts</h3>
                     <p className="text-muted-foreground">
                         Accelerate your development workflow with our collection of code libraries, UI kits for frameworks like React and Vue, and ready-to-use Python automation scripts. Dive into complex topics like Data Structures, Algorithms, AI & Machine Learning, and Cyber Security with our beginner-friendly notes and concept guides, designed to make learning practical and accessible.
                     </p>
                 </div>
-                <div className="bg-card p-6 rounded-3xl border">
+                <div className="bg-card p-6 rounded-xl border">
                     <h3 className="font-bold text-xl mb-2">For Creatives & Self-Improvers</h3>
                     <p className="text-muted-foreground">
                         Fuel your personal growth and creativity. Find beautifully designed planners, digital journals, and goal-setting workbooks to organize your life. Develop new skills with our guides on public speaking, guitar, creative writing, and more. Our resources are crafted to help you build better habits, manage your time, and unlock your creative potential.
                     </p>
                 </div>
-                <div className="bg-card p-6 rounded-3xl border">
+                <div className="bg-card p-6 rounded-xl border">
                     <h3 className="font-bold text-xl mb-2">AI-Powered Tools</h3>
                     <p className="text-muted-foreground">
                         Experience the future of content creation with our unique AI PDF Generator. Simply describe the document you need – whether it's a study guide, a business report, or a meal planner – and our AI will craft a professional-quality PDF for you in seconds. It's your personal content creation assistant, available 24/7.
@@ -293,7 +293,7 @@ export default function Home() {
         </div>
 
         <div className="mt-12 sm:mt-16 grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          <div className="bg-card p-8 rounded-3xl shadow-sm">
+          <div className="bg-card p-8 rounded-xl shadow-sm">
               <h2 className="text-2xl font-bold mb-6">Subscribe to get notified about latest product</h2>
               {user ? (
                 <form onSubmit={handleSubscribe}>
@@ -342,11 +342,11 @@ export default function Home() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="feedback-name">Name</Label>
-                    <Input id="feedback-name" placeholder="Your Name" required value={feedbackName} onChange={(e) => setFeedbackName(e.target.value)} className="rounded-xl" />
+                    <Input id="feedback-name" placeholder="Your Name" required value={feedbackName} onChange={(e) => setFeedbackName(e.target.value)} className="rounded-full" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="feedback-email">Email</Label>
-                    <Input id="feedback-email" type="email" placeholder="your@email.com" required value={feedbackEmail} onChange={(e) => setFeedbackEmail(e.target.value)} className="rounded-xl" />
+                    <Input id="feedback-email" type="email" placeholder="your@email.com" required value={feedbackEmail} onChange={(e) => setFeedbackEmail(e.target.value)} className="rounded-full" />
                   </div>
                 </div>
                 <div className="space-y-2">
