@@ -342,20 +342,20 @@ export default function Home() {
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="feedback-name">Name</Label>
-                    <Input id="feedback-name" placeholder="Your Name" required value={feedbackName} onChange={(e) => setFeedbackName(e.target.value)} />
+                    <Input id="feedback-name" placeholder="Your Name" required value={feedbackName} onChange={(e) => setFeedbackName(e.target.value)} className="rounded-xl" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="feedback-email">Email</Label>
-                    <Input id="feedback-email" type="email" placeholder="your@email.com" required value={feedbackEmail} onChange={(e) => setFeedbackEmail(e.target.value)} />
+                    <Input id="feedback-email" type="email" placeholder="your@email.com" required value={feedbackEmail} onChange={(e) => setFeedbackEmail(e.target.value)} className="rounded-xl" />
                   </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="feedback-message">General Feedback</Label>
-                  <Textarea id="feedback-message" placeholder="What's on your mind?" value={feedbackMessage} onChange={(e) => setFeedbackMessage(e.target.value)} rows={5} />
+                  <Textarea id="feedback-message" placeholder="What's on your mind?" value={feedbackMessage} onChange={(e) => setFeedbackMessage(e.target.value)} rows={5} className="rounded-xl" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="suggestion-message">What can we add more?</Label>
-                  <Textarea id="suggestion-message" placeholder="Suggest new products, features, or improvements..." value={suggestionMessage} onChange={(e) => setSuggestionMessage(e.target.value)} rows={5} />
+                  <Textarea id="suggestion-message" placeholder="Suggest new products, features, or improvements..." value={suggestionMessage} onChange={(e) => setSuggestionMessage(e.target.value)} rows={5} className="rounded-xl" />
                 </div>
                 <Button type="submit" className="w-full" size="lg" disabled={isSubmittingFeedback}>
                   {isSubmittingFeedback ? 'Sending...' : 'Send Feedback'}
